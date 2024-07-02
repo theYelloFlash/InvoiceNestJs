@@ -7,6 +7,8 @@ export interface IInvoiceRequest {
     subTotal: number
     itemDetails: ItemDetail[]
     product : string;
+    totalGstAmount : number;
+    totalWithutGst : number;
 }
 
 export interface ItemDetail{
@@ -14,4 +16,6 @@ export interface ItemDetail{
     unitCost : number;
     quantity : number;
     amount : number;
+    gstPercentage : number;
+    itemDescription : string;
 }

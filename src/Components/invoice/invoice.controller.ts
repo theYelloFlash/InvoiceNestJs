@@ -7,8 +7,6 @@ import { GenericSchema } from 'src/dataModels/Schemas/generic.schema';
 import { PaginationParams } from 'src/dataModels/DTO/pagination.params.dto';
 import { FilterQuery } from 'mongoose';
 import { Response } from 'express';
-import * as path from 'path';
-import * as fs from 'fs';
 
 
 @Controller('api/invoice')
@@ -23,7 +21,7 @@ export class InvoiceController {
         createdDto.created_date = new Date();
         createdDto.created_user = "sdfdsfdf";
         return await this._invoiceServ.create(createdDto);
-    }
+    }   
 
     @Get(':uuid')
     async findOne(@Param('uuid') uuid: string): Promise<Invoice> {
@@ -56,11 +54,6 @@ export class InvoiceController {
     async getPdf(@Res() res: Response, @Body() createDto : Invoice) {
         console.log( "dsadsa")
 
-        const downloadDir = '/home/pulse18/Downloads';
-
-        if (!fs.existsSync(downloadDir)) {
-            fs.mkdirSync(downloadDir, { recursive: true });
-        }
 
         const pdfBuffer = await this._invoiceServ.generatePdf(createDto);
         res.set({

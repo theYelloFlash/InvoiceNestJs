@@ -1,12 +1,16 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { GenericSchema } from "./generic.schema";
 import { IInvoiceRequest, ItemDetail } from "src/Interface/Requests/invoice.request";
-import { Document } from 'mongoose';
 
 
 
 @Schema()
 export class Invoice extends GenericSchema implements IInvoiceRequest{
+    @Prop()
+    totalWithutGst: number;
+
+    @Prop()
+    totalGstAmount: number;
     
     @Prop()
     product: string;
