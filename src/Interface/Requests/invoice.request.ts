@@ -1,5 +1,6 @@
 export interface IInvoiceRequest {
     userName: string
+    customerId : string
     description: string
     billingTo: string
     invoiceDate: Date

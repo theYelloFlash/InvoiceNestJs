@@ -3,6 +3,10 @@
 /node_modules
 /build
 
+# .gitignore
+.dev.env
+
+
 # Logs
 logs
 *.log

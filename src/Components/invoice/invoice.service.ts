@@ -40,8 +40,7 @@ export class InvoiceService extends GenericService<InvoiceDto, Invoice> {
                     <td style="text-align: center;">${item.quantity}</td>
                     <td style="text-align: center;">${item.gstPercentage}</td>
                     <td style="text-align: center;">${item.amount}</td>
-                </tr>
-            `
+                </tr>`
         })
 
         const template = `

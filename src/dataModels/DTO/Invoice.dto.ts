@@ -4,6 +4,10 @@ import { IInvoice } from "src/Interface/Dist/IInvoice";
 import { ApiProperty } from "@nestjs/swagger";
 
 export class InvoiceDto extends GenericDto implements IInvoice{
+
+    @ApiProperty()
+    customerId: string;
+    
     @ApiProperty()
     totalWithutGst: number;
 

@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Query, Req, UseGuards } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { ProductDto } from 'src/dataModels/DTO/product.dto';
 import { GenericSchema } from 'src/dataModels/Schemas/generic.schema';
@@ -6,6 +6,8 @@ import { Product } from 'src/dataModels/Schemas/product.schema';
 import { PaginationParams } from 'src/dataModels/DTO/pagination.params.dto';
 import { FilterQuery } from 'mongoose';
 import { query } from 'express';
+import { AuthGuard } from '../auth/auth.gaurd';
+import { ExpressJWTRequest } from '../auth/IExpressJwt.request';
 
 @Controller('api/products')
 export class ProductsController {
@@ -14,10 +16,11 @@ export class ProductsController {
     }
 
     @Post()
-    async create(@Body() createDto : ProductDto) : Promise<GenericSchema | Product> {
+    @UseGuards(AuthGuard)
+    async create( @Req() req : ExpressJWTRequest, @Body() createDto : ProductDto) : Promise<GenericSchema | Product> {
         console.log(createDto)
         createDto.created_date = new Date();
-        createDto.created_user = "fsd";
+        createDto.created_user = req.user.tokenDetails.uuid;
         return await this._productServ.create(createDto);
     }
 
@@ -27,10 +30,11 @@ export class ProductsController {
     }
 
     @Get()
-    async findAllByUser(@Query() {skip, limit} : PaginationParams, @Param('userId') userId : string){
+    @UseGuards(AuthGuard)
+    async findAllByUser( @Req() req : ExpressJWTRequest, @Query() {skip, limit} : PaginationParams, @Param('userId') userId : string){
         const query : FilterQuery<ProductDto> = {
             isDeleted : false,
-            // created_user : userId,
+            created_user : req.user.tokenDetails.uuid,
         }
 
         return await this._productServ.findAll(query, {skip, limit});

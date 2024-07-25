@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Query, Res } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Query, Req, Res, UseGuards } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { InvoiceService } from './invoice.service';
 import { InvoiceDto } from 'src/dataModels/DTO/Invoice.dto';
@@ -7,6 +7,8 @@ import { GenericSchema } from 'src/dataModels/Schemas/generic.schema';
 import { PaginationParams } from 'src/dataModels/DTO/pagination.params.dto';
 import { FilterQuery } from 'mongoose';
 import { Response } from 'express';
+import { ExpressJWTRequest } from '../auth/IExpressJwt.request';
+import { AuthGuard } from '../auth/auth.gaurd';
 
 
 @Controller('api/invoice')
@@ -16,12 +18,13 @@ export class InvoiceController {
     constructor(private _invoiceServ: InvoiceService) { }
 
     @Post()
-    async create(@Body() createdDto: InvoiceDto): Promise<GenericSchema | Invoice> {
-        console.log(createdDto)
+    @UseGuards(AuthGuard)
+    async create(@Req() req: ExpressJWTRequest, @Body() createdDto: InvoiceDto): Promise<GenericSchema | Invoice> {
+        console.log(req.user.tokenDetails.uuid);
         createdDto.created_date = new Date();
-        createdDto.created_user = "sdfdsfdf";
+        createdDto.created_user = req.user.tokenDetails.uuid;
         return await this._invoiceServ.create(createdDto);
-    }   
+    }
 
     @Get(':uuid')
     async findOne(@Param('uuid') uuid: string): Promise<Invoice> {
@@ -36,9 +39,11 @@ export class InvoiceController {
     }
 
     @Get()
-    async findAllByUser(@Query() { skip, limit }: PaginationParams) {
+    @UseGuards(AuthGuard)
+    async findAllByUser( @Req() req : ExpressJWTRequest, @Query() { skip, limit }: PaginationParams) {
         const query: FilterQuery<InvoiceDto> = {
             isDeleted: false,
+            created_user : req.user.tokenDetails.uuid
         }
 
         return await this._invoiceServ.findAll(query, { skip, limit });
@@ -51,8 +56,8 @@ export class InvoiceController {
 
 
     @Post('createPdf')
-    async getPdf(@Res() res: Response, @Body() createDto : Invoice) {
-        console.log( "dsadsa")
+    async getPdf(@Res() res: Response, @Body() createDto: Invoice) {
+        console.log("dsadsa")
 
 
         const pdfBuffer = await this._invoiceServ.generatePdf(createDto);

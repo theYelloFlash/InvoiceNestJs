@@ -6,8 +6,8 @@ import { UserDto } from 'src/dataModels/DTO/users.dto';
 import { User } from 'src/dataModels/Schemas/user.schema';
 
 @Injectable()
-export class UsersService extends GenericService<UserDto, User> {
+export class UserService extends GenericService<UserDto,User> {
     constructor(@InjectModel(User.name) private userModel : Model<User>){
-        super(userModel)
+        super(userModel);
     }
 }

@@ -6,11 +6,14 @@ import { AuthModule } from './Components/auth/auth.module';
 import { InvoiceModule } from './Components/invoice/invoice.module';
 import { ProductsController } from './Components/products/products.controller';
 import { ProductsModule } from './Components/products/products.module';
-import { UsersController } from './Components/users/users.controller';
-import { UsersService } from './Components/users/users.service';
-import { UsersModule } from './Components/users/users.module';
+import { CustomerController } from './Components/customer/customers.controller';
+import { CustomerModule } from './Components/customer/customers.module';
 import { MulterModule } from '@nestjs/platform-express';
 import { GridFsMulterConfigService } from './Services/gridFsMulterConfigService.service';
+import { UserController } from './Components/user/user.controller';
+import { UserModule } from './Components/user/user.module';
+import { PaymentModule } from './Components/payment/payment.module';
+import { BalanceSheetModule } from './Components/balance-sheet/balance-sheet.module';
 
 @Module({
   imports: [
@@ -21,9 +24,12 @@ import { GridFsMulterConfigService } from './Services/gridFsMulterConfigService.
     AuthModule,
     InvoiceModule,
     ProductsModule,
-    UsersModule
+    CustomerModule,
+    UserModule,
+    PaymentModule,
+    BalanceSheetModule
   ],
-  controllers: [AppController, ProductsController, UsersController],
+  controllers: [AppController, ProductsController, CustomerController, UserController],
   providers: [AppService],
 })
 export class AppModule {}

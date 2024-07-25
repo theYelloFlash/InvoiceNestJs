@@ -1,4 +1,4 @@
-export interface IUserRequest{
+export interface ICustomerRequest{
     firstName : string;
     lastName : string;
     phoneNo : string;

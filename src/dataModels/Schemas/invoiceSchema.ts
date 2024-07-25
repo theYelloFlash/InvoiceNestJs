@@ -6,6 +6,10 @@ import { IInvoiceRequest, ItemDetail } from "src/Interface/Requests/invoice.requ
 
 @Schema()
 export class Invoice extends GenericSchema implements IInvoiceRequest{
+
+    @Prop()
+    customerId: string;
+    
     @Prop()
     totalWithutGst: number;
 
